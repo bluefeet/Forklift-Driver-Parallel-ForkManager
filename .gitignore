@@ -1,0 +1,5 @@
+/Forklift-Driver-Parallel-ForkManager*
+/.build
+*.swp
+/nytprof*
+/cover_db

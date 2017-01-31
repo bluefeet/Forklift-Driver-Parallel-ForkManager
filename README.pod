@@ -1,0 +1,100 @@
+=pod
+
+=head1 NAME
+
+Forklift::Driver::Parallel::ForkManager - Run Forklift jobs in parallel using forks.
+
+=head1 SYNOPSIS
+
+    use Forklift;
+    my $lift = Forklift->new(
+        driver => {
+            class       => '::Parallel::ForkManager',
+            max_workers => 5,
+            wait_sleep  => 0.5,
+        },
+    );
+
+=head1 DESCRIPTION
+
+This is a driver for L<Forklift> which runs jobs in parallel using
+L<Parallel::ForkManager>.
+
+This driver consumes the L<Forklift::Driver> role and provides the full
+interface as documented there.
+
+=head1 OPTIONAL ARGUMENTS
+
+=head2 max_workers
+
+The number of maximum child processes to fork.  Defaults to C<10>.
+
+=head2 wait_sleep
+
+How long to sleep between wait checks.  This is used to set the
+C<set_waitpid_blocking_sleep> on the L<Parallel::ForkManager>
+object.
+
+=head1 ATTRIBUTES
+
+=head2 is_busy
+
+Returns true if C<running_procs> in L<Parallel::ForkManager> is
+non-empty.
+
+=head2 is_saturated
+
+Returns true if the number of PIDs in C<running_procs> is less
+than the value of C<max_procs> (AKA L</max_workers>) in
+L<Parallel::ForkManager>.
+
+=head2 in_job
+
+Returns true if C<is_child> from L<Parallel::ForkManager> returns true.
+
+=head2 run_jobs
+
+Takes a list of jobs and runs them together inside a single
+L<Parallel::ForkManager> process.  This will block if
+L</is_saturated> is true.
+
+=head2 yield
+
+Calls C<reap_finished_children> in L<Parallel::ForkManager>.
+
+=head2 wait_one
+
+Waits for there to be one less active worker than there was
+when the wait started.
+
+=head2 wait_all
+
+Waits for all active workers to finish.
+
+=head2 wait_saturated
+
+Waits for there to be at least one available worker slot.
+
+=head1 SUPPORT
+
+Feature requests, pull requests, and discussion can be had on GitHub at
+L<https://github.com/bluefeet/Forklift-Driver-Parallel-ForkManager>.  You
+are also welcome to email the author directly.
+
+=head1 AUTHOR
+
+Aran Clary Deltac <bluefeetE<64>gmail.com>
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to L<ZipRecruiter|https://www.ziprecruiter.com/>
+for encouraging their employees to contribute back to the open
+source ecosystem.  Without their dedication to quality software
+development this distribution would not exist.
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
